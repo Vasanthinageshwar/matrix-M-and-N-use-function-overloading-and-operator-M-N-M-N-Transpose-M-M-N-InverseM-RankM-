@@ -1,0 +1,209 @@
+Given two matrix M and N, use function overloading
+and operator
+overloading to perform the following operations:
+1.      M+N
+2.      M-N 
+3.      Transpose(M)
+4.      M*N
+5.      Inverse(M)
+6.      Rank(M)
+CODE:
+
+#include&lt;iostream&gt;
+using namespace std;
+
+class matrix
+{
+float A[3][3];
+public :
+
+matrix()
+{
+for(int i=0;i&lt;3;i++)
+for(int j=0;j&lt;3;j++)
+A[i][j]=0;
+}
+void input()
+{
+cout&lt;&lt;&quot;Enter the matrix : &quot;&lt;&lt;endl;
+for(int i=0;i&lt;3;i++)
+for(int j=0;j&lt;3;j++)
+cin&gt;&gt;A[i][j];
+}
+matrix operator + (const matrix &amp;B)
+
+{
+matrix C;
+for(int i=0;i&lt;3;i++)
+for(int j=0;j&lt;3;j++)
+C.A[i][j]=A[i][j]+B.A[i][j];
+return C;
+}
+matrix operator - (const matrix &amp;B)
+{
+matrix C;
+for(int i=0;i&lt;3;i++)
+for(int j=0;j&lt;3;j++)
+
+C.A[i][j]=A[i][j]-B.A[i][j];
+return C;
+}
+matrix transpose()
+{
+matrix B;
+for(int i=0;i&lt;3;i++)
+for(int j=0;j&lt;3;j++)
+B.A[i][j]=A[j][i];
+return B;
+}
+matrix operator * (const matrix &amp;B)
+{
+matrix C;
+for(int i=0;i&lt;3;i++)
+for(int j=0;j&lt;3;j++)
+for(int k=0;k&lt;3;k++)
+C.A[i][j]+=A[i][k]*B.A[k][j];
+return C;
+}
+void inverse()
+{
+float det=0;
+for(int i=0;i&lt;3;i++)
+det+=A[0][i]*(A[1][(i+1)%3]*A[2][(i+2)%3]-
+
+A[1][(i+2)%3]*A[2][(i+1)%3]);
+if(det!=0)
+
+{
+cout&lt;&lt;&quot;Inverse of the matrix is as follows : &quot;&lt;&lt;endl;
+for(int i=0;i&lt;3;i++)
+{
+for(int j=0;j&lt;3;j++)
+cout&lt;&lt;((A[(j+1)%3][(i+1)%3] *
+
+A[(j+2)%3][(i+2)%3]) - (A[(j+1)%3][(i+2)%3] * A[(j+2)%3][(i+1)%3]))/ det&lt;&lt;&quot; &quot;;
+
+cout&lt;&lt;endl;
+}
+}
+else
+cout&lt;&lt;&quot;Inverse of the matrix is not possible&quot;&lt;&lt;endl;
+}
+void rank()
+{
+int r=3;
+for(int i=0;i&lt;r;i++)
+{
+if(A[i][i])
+{
+for(int j=0;j&lt;3;j++)
+{
+
+if(i!=j)
+{
+double mul=(double)A[j][i]/A[i][i];
+for(int k=0;k&lt;r;k++)
+A[j][k]-=mul*A[i][k];
+
+}
+}
+}
+else
+{
+bool reduce=true;
+for(int k=i+1;k&lt;3;k++)
+{
+if(A[k][i])
+{
+for(int c=0;c&lt;r;c++)
+swap(A[i][c],A[k][c]);
+
+reduce=false;
+break;
+}
+}
+if(reduce)
+{
+r--;
+for(int k=0;k&lt;3;k++)
+A[k][i]=A[k][r];
+
+}
+i--;
+}
+
+}
+cout&lt;&lt;&quot;Rank of the matrix : &quot;&lt;&lt;r&lt;&lt;endl;
+
+}
+void display()
+{
+int count=0;
+for(int i=0;i&lt;3;i++)
+{
+for(int j=0;j&lt;3;j++)
+cout&lt;&lt;A[i][j]&lt;&lt;&quot; &quot;;
+cout&lt;&lt;endl;
+}
+}
+
+};
+
+int main()
+{
+matrix M1,M2,M3;
+int ch;
+do
+{
+cout&lt;&lt;&quot;\n******MENU****&quot;&lt;&lt;endl;
+
+cout&lt;&lt;&quot;1.Addition\n2.Subtraction\n3.Transpose\n4.Multiplication\n5.Inverse\
+n6.Rank\n7.Exit&quot;&lt;&lt;endl;
+cout&lt;&lt;&quot;Enter your choice : &quot;;
+cin&gt;&gt;ch;
+switch(ch)
+{
+
+case 1 : M1.input();
+M2.input();
+M3=M1+M2;
+cout&lt;&lt;&quot;Sum of the matrices is as follows : &quot;&lt;&lt;endl;
+M3.display();
+break;
+case 2 : M1.input();
+M2.input();
+M3=M1-M2;
+cout&lt;&lt;&quot;Subtraction of the matrices is as follows :
+
+&quot;&lt;&lt;endl;
+
+M3.display();
+break;
+case 3 : M1.input();
+M2=M1.transpose();
+cout&lt;&lt;&quot;Transpose of the matrix is as follows : &quot;&lt;&lt;endl;
+M2.display();
+break;
+case 4 : M1.input();
+M2.input();
+M3=M1*M2;
+cout&lt;&lt;&quot;Multiplication of the matrices is as follows :
+
+&quot;&lt;&lt;endl;
+
+M3.display();
+break;
+case 5 : M1.input();
+M1.inverse();
+
+break;
+case 6 : M1.input();
+M1.rank();
+break;
+case 7 : exit(0);
+default : cout&lt;&lt;&quot;Invalid choice !!!&quot;;
+break;
+}
+}while(ch!=7);
+return 0;
+}
